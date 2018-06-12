@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "nginx.fullname" . }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ template "nginx.name" . }}
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  template:
+    metadata:
+      name: {{ template "nginx.fullname" . }}
+      labels:
+        release: {{ .Release.Name }}
+        app: {{ template "nginx.name" . }}
+    spec:
+      restartPolicy: {{ .Values.restartPolicy }}
+      containers:
+        - name: post-install-job
+          image: "alpine:3.3"
+          command: ["/bin/sleep", "{{ .Values.sleepyTime }}"]

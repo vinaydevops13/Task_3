@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ template "nginx.fullname" . }}-service-test"
+  labels:
+    app: {{ template "nginx.name" . }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: curl
+      image: radial/busyboxplus:curl
+      command: ['curl']
+      args:  ['{{ template "nginx.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
